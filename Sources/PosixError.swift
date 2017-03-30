@@ -9,10 +9,14 @@
 import Darwin
 
 public struct PosixError : Error, CustomStringConvertible {
-    public init(code: POSIXErrorCode) {
-        let s = strerror(code.rawValue)!
-        self.init(code: code,
-                  description: String(cString: s))
+    public init(code: Int32) {
+        guard let posixCode = POSIXErrorCode(rawValue: code) else {
+            fatalError("not posix error code: \(code)")
+        }
+        let s = strerror(posixCode.rawValue)!
+        let description = String(cString: s)
+        self.init(code: posixCode,
+                  description: description)
     }
     
     public init(code: POSIXErrorCode,

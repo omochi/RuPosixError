@@ -32,11 +32,4 @@ public struct PosixError : Error, CustomStringConvertible {
     public var description: String {
         return "PosixError(code: \(code.rawValue), message: \(message))"
     }
-    
-    public static func run(proc: () -> Int32) throws {
-        let code = proc()
-        guard code == 0 else {
-            throw PosixError(code: code)
-        }
-    }
 }

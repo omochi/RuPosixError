@@ -13,19 +13,23 @@ public struct PosixError : Error, CustomStringConvertible {
         guard let posixCode = POSIXErrorCode(rawValue: code) else {
             fatalError("not posix error code: \(code)")
         }
-        let s = strerror(posixCode.rawValue)!
-        let description = String(cString: s)
+        let messageCStr = strerror(code)!
+        let message = String(cString: messageCStr)
         self.init(code: posixCode,
-                  description: description)
+                  message: message)
     }
     
     public init(code: POSIXErrorCode,
-                description: String)
+                message: String)
     {
         self.code = code
-        self.description = description
+        self.message = message
     }
     
     public var code: POSIXErrorCode
-    public var description: String
+    public var message: String
+    
+    public var description: String {
+        return "PosixError(code: \(code.rawValue), message: \(message))"
+    }
 }
